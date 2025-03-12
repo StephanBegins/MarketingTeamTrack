@@ -8,7 +8,7 @@ import Sidebar from "./components/Sidebar";
 import "./App.css";
 
 function App() {
-  return (
+  return ( 
     <Router>
       <div className="app-container">
         <Header />
