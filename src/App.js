@@ -3,15 +3,13 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Tasks from "./pages/Tasks";
 import Reports from "./pages/Reports";
-import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import "./App.css";
 
 function App() {
   return ( 
     <Router>
-      <div className="app-container">
-        <Header />
+      <div className="app-container">s
         <div className="main-content">
           <Sidebar />
           <Routes>
@@ -22,7 +20,7 @@ function App() {
         </div>
       </div>
     </Router>
-  );
+  ); 
 }
 
 export default App;
