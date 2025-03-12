@@ -1,0 +1,12 @@
+.task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  button {
+    background: #008CBA;
+    color: white;
+    border: none;
+    padding: 8px;
+  }
+  
