@@ -91,7 +91,6 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <h1>Marketing Team Task Tracker</h1>
 
       {/* Input Form */}
       <div className="form-container">

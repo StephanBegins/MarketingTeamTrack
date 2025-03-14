@@ -3,6 +3,8 @@
     background: #333;
     color: white;
     padding: 20px;
+    border-top-right-radius: 22px;
+    border-bottom-right-radius: 22px;
   }
   .sidebar ul {
     list-style: none;
