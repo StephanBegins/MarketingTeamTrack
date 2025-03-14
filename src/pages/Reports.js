@@ -1,6 +1,8 @@
+import "./Reports.css";
+
 const Reports = () => {
     return (
-      <div>
+      <div className="reports-container">
         <h1>Reports</h1>
         <p>Generate and analyze marketing reports.</p>
       </div>

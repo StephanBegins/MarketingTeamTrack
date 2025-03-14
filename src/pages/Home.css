@@ -1,5 +1,6 @@
 .home-container {
   padding: 20px;
+  margin-left: 15%; /* Ensures content starts after the sidebar */
   font-family: Arial, sans-serif;
 }
 
@@ -9,7 +10,7 @@ h1 {
 }
 
 .form-container {
-  background: #f9f9f9;
+  background: #ebeaea;
   padding: 15px;
   border-radius: 5px;
   margin-bottom: 20px;

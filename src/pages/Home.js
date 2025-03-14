@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Home.css";
 
 const Home = () => {
-  // State for new task input
+  // State for new task input (mthdr)
   const [newTask, setNewTask] = useState({
     mthdr_userid: "",
     mthdr_date: "",
@@ -13,63 +13,31 @@ const Home = () => {
     remarks: "",
   });
 
-  // State for records
-  const [headers, setHeaders] = useState([
-    {
-      id: 1,
-      mthdr_userid: "JohnDoe",
-      mthdr_date: "2025-03-12",
-      mthdr_time: "10:30 AM",
-      mthdr_type: "Existing Customer",
-      mthdr_todaytask: "New Order",
-      mtdtl_noofcustomers: 2,
-      remarks: "Urgent delivery required",
-    },
-    {
-      id: 2,
-      mthdr_userid: "Alice",
-      mthdr_date: "2025-03-11",
-      mthdr_time: "2:00 PM",
-      mthdr_type: "New Customer",
-      mthdr_todaytask: "Meeting Customer",
-      mtdtl_noofcustomers: 1,
-      remarks: "Discussed pricing",
-    },
-  ]);
+  // State for main tasks (mthdr records)
+  const [headers, setHeaders] = useState([]);
 
+  // State for selected mthdr to add mtdtl records
   const [selectedHeader, setSelectedHeader] = useState(null);
 
-  const details = {
-    1: [
-      {
-        id: 1,
-        mtdtl_project: "Project A",
-        mtdtl_contactperson: "Mr. Smith",
-        mtdtl_designation: "Manager",
-        mtdtl_contactno: "9876543210",
-        mtdtl_purposedetails: "Finalizing contract",
-        mtdtl_payment: 5000.0,
-      },
-    ],
-    2: [
-      {
-        id: 2,
-        mtdtl_project: "Project C",
-        mtdtl_contactperson: "Mr. Alex",
-        mtdtl_designation: "Director",
-        mtdtl_contactno: "9876543212",
-        mtdtl_purposedetails: "Discussing investment",
-        mtdtl_payment: 15000.0,
-      },
-    ],
-  };
+  // State for task details (mtdtl)
+  const [taskDetails, setTaskDetails] = useState({});
 
-  // Handle input change
+  // State for new task detail input (mtdtl)
+  const [newDetail, setNewDetail] = useState({
+    mtdtl_project: "",
+    mtdtl_contactperson: "",
+    mtdtl_designation: "",
+    mtdtl_contactno: "",
+    mtdtl_purposedetails: "",
+    mtdtl_payment: "",
+  });
+
+  // Handle mthdr input change
   const handleInputChange = (e) => {
     setNewTask({ ...newTask, [e.target.name]: e.target.value });
   };
 
-  // Add new task
+  // Add new mthdr record
   const handleAddTask = () => {
     if (!newTask.mthdr_userid || !newTask.mthdr_date || !newTask.mthdr_time) {
       alert("Please fill all required fields!");
@@ -78,6 +46,7 @@ const Home = () => {
 
     const newRecord = { id: headers.length + 1, ...newTask };
     setHeaders([...headers, newRecord]);
+    setTaskDetails({ ...taskDetails, [newRecord.id]: [] }); // Initialize empty details for this record
     setNewTask({
       mthdr_userid: "",
       mthdr_date: "",
@@ -89,32 +58,48 @@ const Home = () => {
     });
   };
 
+  // Handle mtdtl input change
+  const handleDetailInputChange = (e) => {
+    setNewDetail({ ...newDetail, [e.target.name]: e.target.value });
+  };
+
+  // Add new mtdtl record to selected mthdr
+  const handleAddDetail = () => {
+    if (!selectedHeader) {
+      alert("Select a task first!");
+      return;
+    }
+
+    if (!newDetail.mtdtl_project || !newDetail.mtdtl_contactperson || !newDetail.mtdtl_contactno) {
+      alert("Please fill all required fields!");
+      return;
+    }
+
+    const newDetailRecord = { id: (taskDetails[selectedHeader]?.length || 0) + 1, ...newDetail };
+    setTaskDetails({
+      ...taskDetails,
+      [selectedHeader]: [...(taskDetails[selectedHeader] || []), newDetailRecord],
+    });
+
+    setNewDetail({
+      mtdtl_project: "",
+      mtdtl_contactperson: "",
+      mtdtl_designation: "",
+      mtdtl_contactno: "",
+      mtdtl_purposedetails: "",
+      mtdtl_payment: "",
+    });
+  };
+
   return (
     <div className="home-container">
-
-      {/* Input Form */}
+      {/* Input Form for mthdr */}
       <div className="form-container">
         <h2>Add New Task</h2>
         <div className="form-grid">
-          <input
-            type="text"
-            name="mthdr_userid"
-            placeholder="User ID"
-            value={newTask.mthdr_userid}
-            onChange={handleInputChange}
-          />
-          <input
-            type="date"
-            name="mthdr_date"
-            value={newTask.mthdr_date}
-            onChange={handleInputChange}
-          />
-          <input
-            type="time"
-            name="mthdr_time"
-            value={newTask.mthdr_time}
-            onChange={handleInputChange}
-          />
+          <input type="text" name="mthdr_userid" placeholder="User ID" value={newTask.mthdr_userid} onChange={handleInputChange} />
+          <input type="date" name="mthdr_date" value={newTask.mthdr_date} onChange={handleInputChange} />
+          <input type="time" name="mthdr_time" value={newTask.mthdr_time} onChange={handleInputChange} />
           <select name="mthdr_type" value={newTask.mthdr_type} onChange={handleInputChange}>
             <option value="Existing Customer">Existing Customer</option>
             <option value="New Customer">New Customer</option>
@@ -124,25 +109,13 @@ const Home = () => {
             <option value="Payment">Payment</option>
             <option value="Meeting Customer">Meeting Customer</option>
           </select>
-          <input
-            type="number"
-            name="mtdtl_noofcustomers"
-            placeholder="No. of Customers"
-            value={newTask.mtdtl_noofcustomers}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="remarks"
-            placeholder="Remarks"
-            value={newTask.remarks}
-            onChange={handleInputChange}
-          />
+          <input type="number" name="mtdtl_noofcustomers" placeholder="No. of Customers" value={newTask.mtdtl_noofcustomers} onChange={handleInputChange} />
+          <input type="text" name="remarks" placeholder="Remarks" value={newTask.remarks} onChange={handleInputChange} />
           <button onClick={handleAddTask}>Add Task</button>
         </div>
       </div>
 
-      {/* Task Records */}
+      {/* Task Records (mthdr) */}
       <h2>Task Records</h2>
       <table className="task-table">
         <thead>
@@ -168,17 +141,29 @@ const Home = () => {
               <td>{header.mtdtl_noofcustomers}</td>
               <td>{header.remarks}</td>
               <td>
-                <button onClick={() => setSelectedHeader(header.id)}>View Details</button>
+                <button onClick={() => setSelectedHeader(header.id)}>View/Add Details</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      {/* Task Details Section */}
+      {/* Task Details Form (mtdtl) */}
       {selectedHeader && (
         <div className="details-section">
-          <h2>Task Details</h2>
+          <h2>Add Task Details</h2>
+          <div className="form-grid">
+            <input type="text" name="mtdtl_project" placeholder="Project" value={newDetail.mtdtl_project} onChange={handleDetailInputChange} />
+            <input type="text" name="mtdtl_contactperson" placeholder="Contact Person" value={newDetail.mtdtl_contactperson} onChange={handleDetailInputChange} />
+            <input type="text" name="mtdtl_designation" placeholder="Designation" value={newDetail.mtdtl_designation} onChange={handleDetailInputChange} />
+            <input type="text" name="mtdtl_contactno" placeholder="Contact No." value={newDetail.mtdtl_contactno} onChange={handleDetailInputChange} />
+            <input type="text" name="mtdtl_purposedetails" placeholder="Purpose Details" value={newDetail.mtdtl_purposedetails} onChange={handleDetailInputChange} />
+            <input type="number" name="mtdtl_payment" placeholder="Payment Amount" value={newDetail.mtdtl_payment} onChange={handleDetailInputChange} />
+            <button onClick={handleAddDetail}>Add Task Detail</button>
+          </div>
+
+          {/* Task Details Table */}
+          <h3>Task Details</h3>
           <table className="details-table">
             <thead>
               <tr>
@@ -186,12 +171,12 @@ const Home = () => {
                 <th>Contact Person</th>
                 <th>Designation</th>
                 <th>Contact No.</th>
-                <th>Purpose Details</th>
+                <th>Purpose</th>
                 <th>Payment</th>
               </tr>
             </thead>
             <tbody>
-              {details[selectedHeader]?.map((detail) => (
+              {taskDetails[selectedHeader]?.map((detail) => (
                 <tr key={detail.id}>
                   <td>{detail.mtdtl_project}</td>
                   <td>{detail.mtdtl_contactperson}</td>

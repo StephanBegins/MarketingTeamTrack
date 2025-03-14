@@ -1,8 +1,9 @@
 import TaskList from "../components/TaskList";
+import "./Tasks.css";
 
 const Tasks = () => {
   return (
-    <div>
+    <div className="tasks-container">
       <h1>Tasks</h1>
       <TaskList />
     </div>
