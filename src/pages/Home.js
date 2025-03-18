@@ -116,7 +116,7 @@ const Home = () => {
       </div>
 
       {/* Task Records (mthdr) */}
-      <h2>Task Records</h2>
+      <h2>Task Records</h2> 
       <table className="task-table">
         <thead>
           <tr>
