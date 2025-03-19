@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 const Login = ({ setIsAuthenticated }) => {
+  const [role, setRole] = useState(""); // State for user role
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,12 +19,21 @@ const Login = ({ setIsAuthenticated }) => {
     e.preventDefault();
     setError("");
 
-    if (email === "admin@example.com" && password === "password") {
+    if (!role) {
+      setError("Please select your role (Admin or Employee)");
+      return;
+    }
+
+    if (role === "Admin" && email === "admin@example.com" && password === "password") {
       localStorage.setItem("isAuthenticated", "true");
-      setIsAuthenticated(true); // Update authentication state
+      setIsAuthenticated(true);
+      navigate("/home");
+    } else if (role === "Employee" && email === "employee@example.com" && password === "password") {
+      localStorage.setItem("isAuthenticated", "true");
+      setIsAuthenticated(true);
       navigate("/home");
     } else {
-      setError("Invalid email or password. Please try again.");
+      setError("Invalid credentials. Please try again.");
     }
   };
 
@@ -35,16 +45,26 @@ const Login = ({ setIsAuthenticated }) => {
           <h1>Litvik Software Labs.</h1>
         </div>
 
-        <h2>Welcome back</h2>
-        <p>Please enter your details to sign in</p>
+        <h2 className="heading2">WELCOME BACK</h2>
+        <p>Please select your role and enter your details to sign in</p>
 
-        <div className="social-login">
-          <button className="google">G</button>
-          <button className="apple"></button>
-          <button className="facebook">f</button>
+        {/* Role Selection */}
+        <div className="role-selection">
+          <button 
+            className={role === "Admin" ? "selected" : ""} 
+            onClick={() => setRole("Admin")}
+          >
+            Admin
+          </button>
+          <button 
+            className={role === "Employee" ? "selected" : ""} 
+            onClick={() => setRole("Employee")}
+          >
+            Employee
+          </button>
         </div>
 
-        <p className="divider">or</p>
+        {error && <p className="error-message">{error}</p>}
 
         <form onSubmit={handleLogin}>
           <input
@@ -62,7 +82,6 @@ const Login = ({ setIsAuthenticated }) => {
             required
           />
 
-          {error && <p className="error-message">{error}</p>}
 
           <div className="remember">
             <div className="remember-left">

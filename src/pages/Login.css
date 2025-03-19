@@ -134,3 +134,10 @@ form input {
     font-size: 14px;
     color: gray;
 }
+
+.heading2 {
+    color: #038dfd;
+    font-size: 19px;
+    margin: 1px 0;
+    margin-top: 10px;
+}
