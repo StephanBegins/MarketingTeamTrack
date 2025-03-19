@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.css"; // Add appropriate styling
+import "./Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -8,7 +8,6 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Redirect to home if already logged in
   useEffect(() => {
     if (localStorage.getItem("isAuthenticated") === "true") {
       navigate("/home");
@@ -17,9 +16,8 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setError(""); // Reset error on new submission
+    setError("");
 
-    // Dummy authentication (replace with API call)
     if (email === "admin@example.com" && password === "password") {
       localStorage.setItem("isAuthenticated", "true");
       navigate("/home");
@@ -31,6 +29,10 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-box">
+        <div className="gradient-header">
+          <h1>Litvik Software Labs.</h1>
+        </div>
+
         <h2>Welcome back</h2>
         <p>Please enter your details to sign in</p>
 
@@ -40,17 +42,19 @@ const Login = () => {
           <button className="facebook">f</button>
         </div>
 
+        <p className="divider">or</p>
+
         <form onSubmit={handleLogin}>
           <input
             type="email"
-            placeholder="Enter your email"
+            placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
             type="password"
-            placeholder="Enter your password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -61,12 +65,13 @@ const Login = () => {
           <div className="remember">
             <input type="checkbox" id="rememberMe" />
             <label htmlFor="rememberMe">Remember for 30 days</label>
+            <a href="/forgot-password" className="forgot-password">Forgot password?</a>
           </div>
 
-          <buttonlogin type="submit">Sign in</buttonlogin>
+          <button type="submit" className="login-button">Sign in</button>
         </form>
 
-        <p>
+        <p className="signup-text">
           Don’t have an account? <a href="/signup">Create account</a>
         </p>
       </div>

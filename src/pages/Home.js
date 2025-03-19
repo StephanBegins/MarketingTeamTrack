@@ -1,7 +1,16 @@
 import React, { useState } from "react";
 import "./Home.css";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+
+  const navigate = useNavigate();
+  // Redirect to login if not authenticated
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    navigate("/", { replace: true }); // Redirect to login
+  };
+
   // State for new task input (mthdr)
   const [newTask, setNewTask] = useState({
     mthdr_userid: "",
@@ -190,6 +199,7 @@ const Home = () => {
           </table>
         </div>
       )}
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
