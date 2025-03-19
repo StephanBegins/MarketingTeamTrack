@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Tasks from "./pages/Tasks";
@@ -21,15 +21,22 @@ function ProtectedLayout({ children }) {
 }
 
 function App() {
-  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true"; // Convert string to boolean
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    localStorage.getItem("isAuthenticated") === "true"
+  );
+
+  useEffect(() => {
+    const checkAuth = () => {
+      setIsAuthenticated(localStorage.getItem("isAuthenticated") === "true");
+    };
+    window.addEventListener("storage", checkAuth); // Listen for storage changes
+    return () => window.removeEventListener("storage", checkAuth);
+  }, []);
 
   return (
     <Router>
       <Routes>
-        {/* Public Route */}
-        <Route path="/" element={<Login />} />
-
-        {/* Protected Routes Wrapped Inside Layout */}
+        <Route path="/" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
         {isAuthenticated ? (
           <>
             <Route path="/home" element={<ProtectedLayout><Home /></ProtectedLayout>} />
@@ -37,7 +44,6 @@ function App() {
             <Route path="/reports" element={<ProtectedLayout><Reports /></ProtectedLayout>} />
           </>
         ) : (
-          // Redirect to login if not authenticated
           <>
             <Route path="/home" element={<Navigate to="/" />} />
             <Route path="/tasks" element={<Navigate to="/" />} />

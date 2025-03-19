@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
-const Login = () => {
+const Login = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -20,11 +20,13 @@ const Login = () => {
 
     if (email === "admin@example.com" && password === "password") {
       localStorage.setItem("isAuthenticated", "true");
+      setIsAuthenticated(true); // Update authentication state
       navigate("/home");
     } else {
       setError("Invalid email or password. Please try again.");
     }
   };
+
 
   return (
     <div className="login-container">
