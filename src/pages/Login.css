@@ -5,20 +5,23 @@
     align-items: center;
     height: 100vh;
     background-color: #f7f8fc;
-  }
-  
-  /* Login Box */
-  .login-box {
+}
+
+/* Login Box */
+.login-box {
     background: white;
-    padding: 2rem;
+    
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 360px;
-  }
-  
-  /* Gradient Header */
-  .gradient-header {
+    width: 410px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* Ensures everything is centered */
+}
+
+/* Gradient Header */
+.gradient-header {
     background: linear-gradient(180deg, #e5e6fa, white);
     height: 80px;
     display: flex;
@@ -27,68 +30,79 @@
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
     margin: -2rem -2rem 1rem;
-  }
-  
-  /* Globe Icon */
-  .globe-icon {
-    width: 40px;
-    height: 40px;
-  }
-  
-  /* Social Login Buttons */
-  .social-login {
+    width: 100%;
+}
+
+/* Social Login Buttons */
+.social-login {
     display: flex;
     justify-content: center;
     gap: 12px;
-  }
-  
-  .social-login button {
+    width: 100%;
+}
+
+.social-login button {
     width: 45px;
     height: 45px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 20px;
-  }
-  
-  .google { background: #db4437; color: white; }
-  .apple { background: black; color: white; }
-  .facebook { background: #1877f2; color: white; }
-  
-  /* Input Fields */
-  form input {
+}
+
+.google { background: #db4437; color: white; }
+.apple { background: black; color: white; }
+.facebook { background: #1877f2; color: white; }
+
+/* Input Fields */
+form {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form input {
+    width: 80%;
     padding: 12px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 16px;
-  }
-  
-  /* Error Message */
-  .error-message {
-    color: red;
-    font-size: 14px;
-    margin-bottom: 10px;
-  }
-  
-  /* Remember me & Forgot Password */
-  .remember {
+}
+
+/* Remember Me & Forgot Password */
+.remember {
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 14px;
     margin-bottom: 15px;
-  }
-  
-  .forgot-password {
+    width: 90%;
+}
+
+/* Ensuring checkbox is leftmost */
+.remember-left {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: flex-start;
+}
+
+.remember-left input {
+    margin-right: 5px;
+}
+
+/* Forgot password stays on the right */
+.forgot-password {
     text-decoration: none;
     color: #6a5acd;
-  }
-  
-  /* Sign-in Button */
-  .login-button {
-    width: 100%;
+    font-size: 14px;
+}
+
+/* Sign-in Button */
+.login-button {
+    width: 30%;
     padding: 12px;
     background: linear-gradient(90deg, #6a5acd, #8a2be2);
     color: white;
@@ -96,26 +110,27 @@
     border-radius: 6px;
     font-size: 16px;
     cursor: pointer;
-  }
-  
-  .login-button:hover {
+    text-align: center;
+}
+
+.login-button:hover {
     background: linear-gradient(90deg, #8a2be2, #6a5acd);
-  }
-  
-  /* Signup Text */
-  .signup-text {
+}
+
+/* Signup Text */
+.signup-text {
     margin-top: 15px;
-  }
-  
-  .signup-text a {
+    font-size: 14px;
+}
+
+.signup-text a {
     color: #6a5acd;
     text-decoration: none;
-  }
-  
-  /* Divider */
-  .divider {
+}
+
+/* Divider */
+.divider {
     margin: 10px 0;
     font-size: 14px;
     color: gray;
-  }
-  
+}

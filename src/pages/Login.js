@@ -63,10 +63,13 @@ const Login = () => {
           {error && <p className="error-message">{error}</p>}
 
           <div className="remember">
-            <input type="checkbox" id="rememberMe" />
-            <label htmlFor="rememberMe">Remember for 30 days</label>
+            <div className="remember-left">
+                <input type="checkbox" id="rememberMe" />
+                <label htmlFor="rememberMe">Remember for 30 days</label>
+            </div>
             <a href="/forgot-password" className="forgot-password">Forgot password?</a>
           </div>
+
 
           <button type="submit" className="login-button">Sign in</button>
         </form>
