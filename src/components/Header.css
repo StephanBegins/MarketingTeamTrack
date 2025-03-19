@@ -1,7 +1,33 @@
 .header {
-    background: #9e9d9d;
-    color: white;
-    padding: 8px;
-    text-align: center;
-  }
-  
+  background: #9e9d9d;
+  color: white;
+  padding: 28px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.header h1 {
+  flex-grow: 1;
+  margin: 0;
+}
+
+.header button {
+  position: absolute;
+  right: 20px;
+  background-color: #007bff;
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-color: black;
+  border-radius: 8px;
+  font-size: 16px;  /* Increase button text size */
+  font-weight: 500; /* Make button text bold */
+}
+
+.header button:hover {
+  background-color: #2a95db;
+}
