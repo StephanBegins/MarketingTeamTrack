@@ -43,3 +43,72 @@ button {
   border: 1px solid #ddd;
   padding: 8px;
 }
+
+.line-container {
+  display: flex;
+  justify-content: flex-start; /* Aligns line to the left */
+  align-items: center;
+  width: 100%;
+  margin: 40px 0;
+}
+
+.line {
+  height: 3px;
+  width: 50%; /* Adjust starting width */
+  max-width: 600px;
+  background: linear-gradient(to right, black, transparent);
+}
+
+.time-picker {
+  position: relative;
+  display: inline-block;
+}
+
+.time-display {
+  padding: 11px;
+  font-size: 14px;
+  color: #070707;
+  border: 1px solid #000000;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: absolute;
+  display: flex;
+  background: white;
+  border: 1px solid #131313;
+  padding: 5px;
+  z-index: 10;
+}
+
+.column {
+  max-height: 150px;
+  overflow-y: auto;
+  min-width: 50px;
+}
+
+.option {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.option:hover,
+.selected {
+  background: blue;
+  color: white;
+}
+
+.small-datepicker {
+  width: 110px;
+  height: 30px;
+  font-size: 14px;
+  padding: 5px;
+}
+
+.center-placeholder {
+  text-align: center;
+  padding-left: 0px;
+  padding-right: 15px;
+  margin-right: 1px;
+}

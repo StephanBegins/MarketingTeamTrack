@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Home.css";
 
 
 const Home = () => {
+
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedHour, setSelectedHour] = useState("12");
+  const [selectedMinute, setSelectedMinute] = useState("00");
+  const [meridian, setMeridian] = useState("AM");
+
+  const dropdownRef = useRef(null);
 
   // State for new task input (mthdr)
   const [newTask, setNewTask] = useState({
@@ -34,10 +41,22 @@ const Home = () => {
     mtdtl_payment: "",
   });
 
-  // Handle mthdr input change
   const handleInputChange = (e) => {
-    setNewTask({ ...newTask, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setNewTask((prevTask) => ({
+      ...prevTask,
+      [name]: value, // Generic handler for text, number, and select inputs
+    }));
   };
+
+
+  const handleTimeChange = () => {
+    setNewTask((prevTask) => ({
+      ...prevTask,
+      mthdr_time: `${selectedHour}:${selectedMinute} ${meridian}`, // Format as "HH:MM AM/PM"
+    }));
+  };
+  
 
   // Add new mthdr record
   const handleAddTask = () => {
@@ -58,6 +77,11 @@ const Home = () => {
       mtdtl_noofcustomers: "",
       remarks: "",
     });
+
+    // Reset time selection
+    setSelectedHour("12");
+    setSelectedMinute("00");
+    setMeridian("AM");
   };
 
   // Handle mtdtl input change
@@ -93,15 +117,80 @@ const Home = () => {
     });
   };
 
+   // Handle click outside to close dropdown
+   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="home-container">
       {/* Input Form for mthdr */}
       <div className="form-container">
-        <h2>Add New Task</h2>
+        <h2>Add Task</h2>
         <div className="form-grid">
           <input type="text" name="mthdr_userid" placeholder="User ID" value={newTask.mthdr_userid} onChange={handleInputChange} />
+
           <input type="date" name="mthdr_date" value={newTask.mthdr_date} onChange={handleInputChange} />
-          <input type="time" name="mthdr_time" value={newTask.mthdr_time} onChange={handleInputChange} />
+
+          {/* Time Picker */}
+          <div className="time-picker" ref={dropdownRef}>
+            {/* Time Display */}
+            <button className="time-display" onClick={() => setShowDropdown(!showDropdown)}>
+              {selectedHour} : {selectedMinute} {meridian} 🕗
+            </button>
+
+            {/* Dropdown */}
+            {showDropdown && (
+              <div className="dropdown">
+                <div className="column">
+                  {Array.from({ length: 12 }, (_, i) => {
+                    const hour = (i + 1).toString().padStart(2, "0");
+                    return (
+                      <div
+                        key={hour}
+                        className={`option ${selectedHour === hour ? "selected" : ""}`}
+                        onClick={() => { setSelectedHour(hour); handleTimeChange(); }}>
+                        {hour}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="column">
+                  {Array.from({ length: 60 }, (_, i) => {
+                    const minute = i.toString().padStart(2, "0");
+                    return (
+                      <div
+                        key={minute}
+                        className={`option ${selectedMinute === minute ? "selected" : ""}`}
+                        onClick={() => { setSelectedMinute(minute); handleTimeChange(); }}>
+                        {minute}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="column">
+                  {["AM", "PM"].map((period) => (
+                    <div
+                      key={period}
+                      className={`option ${meridian === period ? "selected" : ""}`}
+                      onClick={() => { setMeridian(period); handleTimeChange(); }}>
+                      {period}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
           <select name="mthdr_type" value={newTask.mthdr_type} onChange={handleInputChange}>
             <option value="Existing Customer">Existing Customer</option>
             <option value="New Customer">New Customer</option>
@@ -113,12 +202,12 @@ const Home = () => {
           </select>
           <input type="number" name="mtdtl_noofcustomers" placeholder="No. of Customers" value={newTask.mtdtl_noofcustomers} onChange={handleInputChange} />
           <input type="text" name="remarks" placeholder="Remarks" value={newTask.remarks} onChange={handleInputChange} />
-          <button onClick={handleAddTask}>Add Task</button>
+          <button onClick={handleAddTask}>Next</button>
         </div>
       </div>
 
       {/* Task Records (mthdr) */}
-      <h2>Task Records</h2> 
+      <h4>Task Records</h4> 
       <table className="task-table">
         <thead>
           <tr>
@@ -143,17 +232,21 @@ const Home = () => {
               <td>{header.mtdtl_noofcustomers}</td>
               <td>{header.remarks}</td>
               <td>
-                <button onClick={() => setSelectedHeader(header.id)}>View/Add Details</button>
+                <button onClick={() => setSelectedHeader(header.id)}>Add More Details</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
+      <div className="line-container">
+        <div className="line"></div>
+      </div>
+
       {/* Task Details Form (mtdtl) */}
       {selectedHeader && (
         <div className="details-section">
-          <h2>Add Task Details</h2>
+          <h2>More Details</h2>
           <div className="form-grid">
             <input type="text" name="mtdtl_project" placeholder="Project" value={newDetail.mtdtl_project} onChange={handleDetailInputChange} />
             <input type="text" name="mtdtl_contactperson" placeholder="Contact Person" value={newDetail.mtdtl_contactperson} onChange={handleDetailInputChange} />
@@ -161,7 +254,7 @@ const Home = () => {
             <input type="text" name="mtdtl_contactno" placeholder="Contact No." value={newDetail.mtdtl_contactno} onChange={handleDetailInputChange} />
             <input type="text" name="mtdtl_purposedetails" placeholder="Purpose Details" value={newDetail.mtdtl_purposedetails} onChange={handleDetailInputChange} />
             <input type="number" name="mtdtl_payment" placeholder="Payment Amount" value={newDetail.mtdtl_payment} onChange={handleDetailInputChange} />
-            <button onClick={handleAddDetail}>Add Task Detail</button>
+            <button onClick={handleAddDetail}>Add More Details</button>
           </div>
 
           {/* Task Details Table */}
