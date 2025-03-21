@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Home.css";
 
 
@@ -8,7 +9,7 @@ const Home = () => {
   const [selectedHour, setSelectedHour] = useState("12");
   const [selectedMinute, setSelectedMinute] = useState("00");
   const [meridian, setMeridian] = useState("AM");
-
+  const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
   // State for new task input (mthdr)
@@ -142,6 +143,33 @@ const Home = () => {
       ...prevDetails,
       [selectedHeader]: prevDetails[selectedHeader].filter((detail) => detail.id !== detailId),
     }));
+  };
+
+  const handleSubmit = () => {
+    const newRecord = {
+      mthdr_userid: newTask.mthdr_userid,
+      mthdr_date: newTask.mthdr_date,
+      mthdr_time: newTask.mthdr_time,
+      mthdr_type: newTask.mthdr_type,
+      mthdr_todaytask: newTask.mthdr_todaytask,
+      mtdtl_noofcustomers: newTask.mtdtl_noofcustomers,
+      remarks: newTask.remarks,
+      taskDetails, // Store task details
+    };
+  
+    // Retrieve existing records from localStorage
+    const existingRecords = JSON.parse(localStorage.getItem("taskRecords")) || [];
+  
+    // Append new record to the array
+    const updatedRecords = [...existingRecords, newRecord];
+  
+    // Store updated array in localStorage
+    localStorage.setItem("taskRecords", JSON.stringify(updatedRecords));
+  
+    alert("Record saved successfully!");
+
+    // Navigate to Reports page after saving
+    navigate("/reports");
   };
   
   
@@ -311,7 +339,7 @@ const Home = () => {
             </tbody>
           </table>
           <div className="submit-btn-container">
-              <button className="submit-btn" onClick={handleAddTask}>Submit</button>
+              <button className="submit-btn" onClick={handleSubmit}>Submit</button>
           </div>
         </div>
       )}

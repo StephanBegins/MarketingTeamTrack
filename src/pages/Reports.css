@@ -2,5 +2,45 @@
     padding: 20px;
     margin-left: 15%; /* Ensures content starts after the sidebar */
     font-family: Arial, sans-serif;
+    width: 100%;
+    overflow-x: auto; /* Enables horizontal scrolling */
   }
   
+.table-wrapper {
+  width: max-content; /* Allows table to extend beyond parent */
+  min-width: 100%;
+  overflow-x: auto;
+  position: relative;
+  z-index: 0; /* Ensures table stays behind sidebar */
+}
+
+.task-table {
+  width: max-content;
+  border-collapse: collapse;
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
+.task-table th,
+.task-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.task-table th {
+  background-color: #f2f2f2;
+  z-index: -1; /* Ensures table headers stay behind the sidebar */
+}
+
+.reports-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.reports-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.reports-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

@@ -10,6 +10,7 @@
   border-top-right-radius: 22px;
   border-bottom-right-radius: 22px;
   overflow-y: auto; /* Enables scrolling if content overflows */
+  z-index: 10; /* Ensures sidebar stays on top */
 }
 
 .sidebar h2 {
