@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import TaskDetails from "./TaskDetails";
+import TaskForm from "./TaskForm";
 import "./TaskList.css";
 
 const TaskList = () => {
-  const [tasks] = useState([
-    { id: 1, user: "User1", type: "New Customer", task: "New Order", date: "2025-03-12" },
-    { id: 2, user: "User2", type: "Existing Customer", task: "Payment", date: "2025-03-11" }
-  ]);
+  const [tasks, setTasks] = useState([]); // Start with an empty list
+
+  const addTask = (newTask) => {
+    setTasks([...tasks, { id: tasks.length + 1, ...newTask }]); // Add new task to the list
+  };
 
   return (
     <div>
+      <h2>Task Form</h2>
+      <TaskForm addTask={addTask} /> {/* Pass function to TaskForm */}
+      
       <h2>Task List</h2>
       <table>
         <thead>

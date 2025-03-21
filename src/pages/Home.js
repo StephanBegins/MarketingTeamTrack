@@ -66,8 +66,8 @@ const Home = () => {
     }
 
     const newRecord = { id: headers.length + 1, ...newTask };
-    setHeaders([...headers, newRecord]);
-    setTaskDetails({ ...taskDetails, [newRecord.id]: [] }); // Initialize empty details for this record
+    setHeaders([newRecord]); // Replace the entire headers state with the new entry
+    setTaskDetails({ 1: [] }); // Reset details for the single entry
     setNewTask({
       mthdr_userid: "",
       mthdr_date: "",
@@ -101,10 +101,12 @@ const Home = () => {
       return;
     }
 
-    const newDetailRecord = { id: (taskDetails[selectedHeader]?.length || 0) + 1, ...newDetail };
+    // Replace any existing entry with a new one instead of stacking
+    const newDetailRecord = { id: 1, ...newDetail }; 
+
     setTaskDetails({
       ...taskDetails,
-      [selectedHeader]: [...(taskDetails[selectedHeader] || []), newDetailRecord],
+      [selectedHeader]: [newDetailRecord], // Ensure only ONE row exists
     });
 
     setNewDetail({
@@ -129,6 +131,20 @@ const Home = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleRemoveTask = () => {
+    setHeaders([]); // Remove the only existing task
+    setTaskDetails({});
+  };
+  
+  const handleRemoveDetail = (detailId) => {
+    setTaskDetails((prevDetails) => ({
+      ...prevDetails,
+      [selectedHeader]: prevDetails[selectedHeader].filter((detail) => detail.id !== detailId),
+    }));
+  };
+  
+  
 
   return (
     <div className="home-container">
@@ -233,11 +249,16 @@ const Home = () => {
               <td>{header.remarks}</td>
               <td>
                 <button onClick={() => setSelectedHeader(header.id)}>Add More Details</button>
+                <button onClick={() => handleRemoveTask(header.id)} className="remove-btn">Remove</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <div className="info-container">
+        <p>"If you want to modify the data, re-enter the data above and click next again. "</p>
+      </div>
 
       <div className="line-container">
         <div className="line"></div>
@@ -268,6 +289,7 @@ const Home = () => {
                 <th>Contact No.</th>
                 <th>Purpose</th>
                 <th>Payment</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -279,10 +301,18 @@ const Home = () => {
                   <td>{detail.mtdtl_contactno}</td>
                   <td>{detail.mtdtl_purposedetails}</td>
                   <td>{detail.mtdtl_payment}</td>
+                  <td>
+                    <button onClick={() => handleRemoveDetail(detail.id)} className="remove-btn">
+                      Remove
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          <div className="submit-btn-container">
+              <button className="submit-btn" onClick={handleAddTask}>Submit</button>
+          </div>
         </div>
       )}
       

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./TaskForm.css";
 
-const TaskForm = () => {
+const TaskForm = ({ addTask }) => {
   const [formData, setFormData] = useState({
     user: "",
     type: "New Customer",
@@ -15,26 +15,27 @@ const TaskForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Task submitted:", formData);
+    addTask(formData); // Pass data to parent component
+    setFormData({ user: "", type: "New Customer", task: "New Order", date: "" }); // Clear form after submission
   };
 
   return (
     <form onSubmit={handleSubmit} className="task-form">
-      <label>User: <input type="text" name="user" onChange={handleChange} required /></label>
+      <label>User: <input type="text" name="user" value={formData.user} onChange={handleChange} required /></label>
       <label>Type:
-        <select name="type" onChange={handleChange}>
+        <select name="type" value={formData.type} onChange={handleChange}>
           <option>New Customer</option>
           <option>Existing Customer</option>
         </select>
       </label>
       <label>Task:
-        <select name="task" onChange={handleChange}>
+        <select name="task" value={formData.task} onChange={handleChange}>
           <option>New Order</option>
           <option>Payment</option>
           <option>Meeting Customer</option>
         </select>
       </label>
-      <label>Date: <input type="date" name="date" onChange={handleChange} required /></label>
+      <label>Date: <input type="date" name="date" value={formData.date} onChange={handleChange} required /></label>
       <button type="submit">Submit</button>
     </form>
   );

@@ -112,3 +112,53 @@ button {
   padding-right: 15px;
   margin-right: 1px;
 }
+
+.remove-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.remove-btn:hover {
+  background-color: darkred;
+}
+
+
+.submit-btn-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.submit-btn {
+  background: linear-gradient(45deg, #007bff, #0bb3d4);
+  color: white;
+  font-size: 18px;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.submit-btn:hover {
+  background: linear-gradient(45deg, #007bff, #007bff);
+  transform: scale(1.05);
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
+}
+
+
+.info-container {
+  display: flex;
+  font-size: medium;
+  color: brown;
+  align-items: center;
+  margin-top:10px;
+}
