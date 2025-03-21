@@ -33,7 +33,7 @@ const Login = ({ setIsAuthenticated }) => {
       setIsAuthenticated(true);
       navigate("/home");
     } else {
-      setError("Invalid credentials. Please try again.");
+      setError("Invalid credentials. Please try again."); 
     }
   };
 
