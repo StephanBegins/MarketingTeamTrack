@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
-import Tasks from "./pages/Tasks";
 import Reports from "./pages/Reports";
 import Login from "./pages/Login";
 import Header from "./components/Header";
@@ -40,13 +39,11 @@ function App() {
         {isAuthenticated ? (
           <>
             <Route path="/home" element={<ProtectedLayout><Home /></ProtectedLayout>} />
-            <Route path="/tasks" element={<ProtectedLayout><Tasks /></ProtectedLayout>} />
             <Route path="/reports" element={<ProtectedLayout><Reports /></ProtectedLayout>} />
           </>
         ) : (
           <>
             <Route path="/home" element={<Navigate to="/" />} />
-            <Route path="/tasks" element={<Navigate to="/" />} />
             <Route path="/reports" element={<Navigate to="/" />} />
           </>
         )}

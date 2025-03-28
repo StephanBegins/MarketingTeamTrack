@@ -106,13 +106,13 @@ const Home = () => {
   
     try {
       const newDetailRecord = {
-        mtdtl_project: newDetail.mtdtl_project,
-        mtdtl_contactperson: newDetail.mtdtl_contactperson,
-        mtdtl_designation: newDetail.mtdtl_designation,
-        mtdtl_contactno: newDetail.mtdtl_contactno,
-        mtdtl_purposedetails: newDetail.mtdtl_purposedetails,
-        mtdtl_payment: newDetail.mtdtl_payment,
-        mthdr_id: selectedHeader, // Linking the detail to the selected task header
+        project: newDetail.mtdtl_project,  // Change key names to match backend
+        contact_person: newDetail.mtdtl_contactperson,
+        designation: newDetail.mtdtl_designation,
+        contact_no: newDetail.mtdtl_contactno,
+        purpose_details: newDetail.mtdtl_purposedetails,
+        payment: newDetail.mtdtl_payment,
+        task_header: selectedHeader,  // Change mthdr_id to task_header
       };
   
       await addTaskDetail(newDetailRecord);
@@ -177,14 +177,19 @@ const Home = () => {
   };
 
   const handleSubmit = async () => {
+    if (!newTask.mthdr_userid || !newTask.mthdr_date || !newTask.mthdr_time) {
+      alert("Please fill all required fields!");
+      return;
+    }
+  
     try {
       const newRecord = {
-        mthdr_userid: newTask.mthdr_userid,
-        mthdr_date: newTask.mthdr_date,
-        mthdr_time: newTask.mthdr_time,
-        mthdr_type: newTask.mthdr_type,
-        mthdr_todaytask: newTask.mthdr_todaytask,
-        mtdtl_noofcustomers: newTask.mtdtl_noofcustomers,
+        user_id: newTask.mthdr_userid,  // Change key names to match backend
+        date: newTask.mthdr_date,
+        time: newTask.mthdr_time,
+        type: newTask.mthdr_type,
+        today_task: newTask.mthdr_todaytask,
+        no_of_customers: newTask.mtdtl_noofcustomers,
         remarks: newTask.remarks,
       };
   
@@ -192,7 +197,7 @@ const Home = () => {
   
       if (response) {
         alert("Record saved successfully!");
-        navigate("/reports"); // Redirect after successful submission
+        navigate("/reports");  // Redirect after successful submission
       }
     } catch (error) {
       console.error("Error saving record:", error);
