@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
-
+import { addTaskHeader } from "../api";
+import { getTaskHeaders } from "../api";
+import { addTaskDetail } from "../api";
 
 const Home = () => {
 
@@ -91,33 +93,48 @@ const Home = () => {
   };
 
   // Add new mtdtl record to selected mthdr
-  const handleAddDetail = () => {
+  const handleAddDetail = async () => {
     if (!selectedHeader) {
       alert("Select a task first!");
       return;
     }
-
+  
     if (!newDetail.mtdtl_project || !newDetail.mtdtl_contactperson || !newDetail.mtdtl_contactno) {
       alert("Please fill all required fields!");
       return;
     }
-
-    // Replace any existing entry with a new one instead of stacking
-    const newDetailRecord = { id: 1, ...newDetail }; 
-
-    setTaskDetails({
-      ...taskDetails,
-      [selectedHeader]: [newDetailRecord], // Ensure only ONE row exists
-    });
-
-    setNewDetail({
-      mtdtl_project: "",
-      mtdtl_contactperson: "",
-      mtdtl_designation: "",
-      mtdtl_contactno: "",
-      mtdtl_purposedetails: "",
-      mtdtl_payment: "",
-    });
+  
+    try {
+      const newDetailRecord = {
+        mtdtl_project: newDetail.mtdtl_project,
+        mtdtl_contactperson: newDetail.mtdtl_contactperson,
+        mtdtl_designation: newDetail.mtdtl_designation,
+        mtdtl_contactno: newDetail.mtdtl_contactno,
+        mtdtl_purposedetails: newDetail.mtdtl_purposedetails,
+        mtdtl_payment: newDetail.mtdtl_payment,
+        mthdr_id: selectedHeader, // Linking the detail to the selected task header
+      };
+  
+      await addTaskDetail(newDetailRecord);
+      alert("Task detail added successfully!");
+  
+      setTaskDetails((prevDetails) => ({
+        ...prevDetails,
+        [selectedHeader]: [...(prevDetails[selectedHeader] || []), newDetailRecord],
+      }));
+  
+      setNewDetail({
+        mtdtl_project: "",
+        mtdtl_contactperson: "",
+        mtdtl_designation: "",
+        mtdtl_contactno: "",
+        mtdtl_purposedetails: "",
+        mtdtl_payment: "",
+      });
+    } catch (error) {
+      console.error("Error adding task detail:", error);
+      alert("Failed to add task detail!");
+    }
   };
 
    // Handle click outside to close dropdown
@@ -137,6 +154,20 @@ const Home = () => {
     setHeaders([]); // Remove the only existing task
     setTaskDetails({});
   };
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const data = await getTaskHeaders();
+        setHeaders(data); // Update state with fetched data
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+  
+    fetchTasks();
+  }, []);
+  
   
   const handleRemoveDetail = (detailId) => {
     setTaskDetails((prevDetails) => ({
@@ -145,33 +176,29 @@ const Home = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    const newRecord = {
-      mthdr_userid: newTask.mthdr_userid,
-      mthdr_date: newTask.mthdr_date,
-      mthdr_time: newTask.mthdr_time,
-      mthdr_type: newTask.mthdr_type,
-      mthdr_todaytask: newTask.mthdr_todaytask,
-      mtdtl_noofcustomers: newTask.mtdtl_noofcustomers,
-      remarks: newTask.remarks,
-      taskDetails, // Store task details
-    };
+  const handleSubmit = async () => {
+    try {
+      const newRecord = {
+        mthdr_userid: newTask.mthdr_userid,
+        mthdr_date: newTask.mthdr_date,
+        mthdr_time: newTask.mthdr_time,
+        mthdr_type: newTask.mthdr_type,
+        mthdr_todaytask: newTask.mthdr_todaytask,
+        mtdtl_noofcustomers: newTask.mtdtl_noofcustomers,
+        remarks: newTask.remarks,
+      };
   
-    // Retrieve existing records from localStorage
-    const existingRecords = JSON.parse(localStorage.getItem("taskRecords")) || [];
+      const response = await addTaskHeader(newRecord);
   
-    // Append new record to the array
-    const updatedRecords = [...existingRecords, newRecord];
-  
-    // Store updated array in localStorage
-    localStorage.setItem("taskRecords", JSON.stringify(updatedRecords));
-  
-    alert("Record saved successfully!");
-
-    // Navigate to Reports page after saving
-    navigate("/reports");
+      if (response) {
+        alert("Record saved successfully!");
+        navigate("/reports"); // Redirect after successful submission
+      }
+    } catch (error) {
+      console.error("Error saving record:", error);
+      alert("Failed to save record!");
+    }
   };
-  
   
 
   return (
